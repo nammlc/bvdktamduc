@@ -1,0 +1,33 @@
+@page
+@model BVTamDuc.Pages.ChiTietBaiVietModel
+<div class="row mb-5">
+    <div class="col-lg-8" style="position: relative;">
+        <div class="article-content" ></div>
+        <h1>@Model.tieu_de</h1>
+        <h1 class="meta" style="font-size: 1rem; font-weight: 300;"> <i>Ngày đăng: @Model.ngay_dang.ToString() | Lượt xem: @Model.luot_xem </i></h1>
+
+        @foreach (var item in Model.NoiDungBaiViets.OrderBy(n => n.thu_tu))
+        {
+            if (item.loai_noi_dung == "text")
+            {
+                <h1 style="font-size: 1.2rem; font-weight: 600;">@item.tieu_de_doan_van</h1>
+                <p>@item.noi_dung</p>
+            }
+            else if (item.loai_noi_dung == "image")
+            {
+                <img src="@item.noi_dung" alt="Ảnh nội dung" class="img-fluid my-3" style="margin: 0;" />
+                <div style="position: relative; right: -45%"><i style="font-weight: 400; font-size: 1rem;"> @item.tieu_de_doan_van</i> </div>
+            }
+        }
+            <div class="mt-3 text-end" style="font-size: 1.2rem; font-weight: 700;">
+                @Model.baiViet.tac_gia
+            </div>
+    </div>
+    <div class="col-lg-4">
+        <img src="~/image/banner_booking.png" alt="" style="padding-left: 28% ; padding-top: 20px;">
+        <img src="~/image/banner_booking2.png" alt="" style="padding-left: 28% ; padding-top: 45px;">
+
+    </div>
+    
+</div>
+</div>

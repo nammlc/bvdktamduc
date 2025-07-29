@@ -1,0 +1,271 @@
+﻿@page
+@model BVTamDuc.Pages.TrangChuModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f3faff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-title {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #003366;
+        border-left: 4px solid #007bff;
+        padding-left: 10px;
+        margin-bottom: 20px;
+    }
+
+    .featured-big {
+        height: 470px;
+        overflow: hidden;
+        position: relative;
+        border-radius: 10px;
+    }
+
+    .featured-big img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-radius: 10px;
+    }
+
+    .featured-big:hover img {
+        transform: scale(1.02);
+    }
+
+    .featured-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .featured-big:hover .featured-overlay {
+        opacity: 1;
+    }
+
+    .featured-overlay h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .featured-overlay small {
+        font-size: 0.875rem;
+    }
+
+    .news-card {
+        background-color: #f3f4f6;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 300px;
+    }
+
+    .news-card img {
+        height: 180px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .news-card .card-body {
+        padding: 10px 20px;
+    }
+
+    .news-card .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #003366;
+        margin-bottom: 5px;
+    }
+
+    .news-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .news-card:hover img {
+        transform: scale(1.03);
+    }
+</style>
+
+<div class="container py-4">
+
+    <!-- Slider -->
+    <div id="homeSlider" class="carousel slide mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/image/test_slider.jpg" class="d-block w-100 rounded" alt="Slide 1" />
+            </div>
+            <div class="carousel-item">
+                <img src="~/image/test_slider_2.jpg" class="d-block w-100 rounded" alt="Slide 2" />
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeSlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeSlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+        </button>
+    </div>
+
+    <!-- Tin nổi bật chính & các tin nhỏ -->
+    <div class="row mb-5">
+        <!-- Tin nổi bật to -->
+        <div class="col-lg-8">
+            <div class="main-title">Tin nổi bật</div>
+            @if (Model.TinNoiBat.Any())
+            {
+                var tinChinh = Model.TinNoiBat.First();
+                <a href="/ChiTietBaiViet?id=@tinChinh.id" class="featured-big d-block">
+                    <img src="@tinChinh.anh_dai_dien" alt="@tinChinh.tieu_de" />
+
+                    <!-- Overlay hiển thị khi hover -->
+                    <div class="featured-overlay p-4 d-flex flex-column justify-content-end">
+                        <h4 class="mb-2">@tinChinh.tieu_de</h4>
+                        <small>@tinChinh.ngay_dang.ToString("dd/MM/yyyy") - @tinChinh.tac_gia</small>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <!-- Các tin nổi bật nhỏ -->
+        <div class="col-lg-4 mt-4 mt-lg-0 d-flex flex-column" style="height: 520px;">
+            <div class="main-title" style="visibility: hidden;">ẩn tiêu đề</div>
+
+            <div class="list-group border rounded shadow-sm p-3 flex-grow-1"
+                style="background-color: #fff; overflow-y: auto;">
+                @foreach (var tin in Model.TinNoiBat.Skip(1).Take(5))
+                {
+                    <a href="/ChiTietBaiViet?id=@tin.id"
+                        class="featured-small text-decoration-none text-dark d-flex align-items-center py-2 border-bottom hover-highlight"
+                        style="transition: background 0.3s ease;">
+                        <img src="@tin.anh_dai_dien" alt="@tin.tieu_de"
+                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 10px;" />
+                        <div class="flex-grow-1" style="font-size: 14px;">@tin.tieu_de</div>
+                        <i class="bi bi-chevron-right ms-2 small arrow-icon"
+                            style="opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease;"></i>
+                    </a>
+                }
+
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="/BaiViet/TatCa" class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill fw-semibold"
+                    style="transition: all 0.3s ease;">
+                    Xem tất cả <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Danh sách bài báo -->
+<div class="main-title">Các bài viết mới</div>
+<div class="row g-4">
+    @foreach (var baiViet in Model.BaiVietList)
+    {
+        <div class="col-md-4">
+            <a href="/ChiTietBaiViet?id=@baiViet.id" class="text-decoration-none">
+                <div class="news-card shadow-sm">
+                    <img src="@baiViet.anh_dai_dien" alt="@baiViet.tieu_de"
+                        style="height: 210px; width: 100%; object-fit: cover; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@baiViet.tieu_de</h5>
+                        <small class="text-muted">@baiViet.ngay_dang.ToString("dd/MM/yyyy")</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    <a href="/TinTuc">Xem tất cả</a>
+</div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <h2 class="mb-4 main-title">Các đơn vị chuyên khoa</h2>
+            <div class="col-md-6">
+                <ul class="list-group list-group-flush khoa-list">
+                    @foreach (var khoa in Model.DanhSachPhongBan)
+                    {
+                        <li class="list-group-item khoa-item">
+                            <a href="/ChiTietPhongBan?id=@khoa.id" class="khoa-link">
+                                <h5 class="mb-1">@khoa.ten_phong_ban</h5>
+                                <p class="mb-0 text-muted">@khoa.mo_ta.Substring(0, Math.Min(100, khoa.mo_ta.Length))...</p>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <div class="mt-3 text-start">
+                    <a href="/DanhSachPhongBan" class="btn btn-outline-primary">Xem tất cả</a>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+                <img src="~/image/bg_home.webp" alt="Các khoa chuyên môn" class="img-fluid rounded"
+                    style="max-height: 450px; object-fit: cover; width: 100%;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="doctor-section container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold main-title">Đội ngũ bác sĩ & điều dưỡng</h3>
+        <a href="/DanhSachBacSi" class="btn btn-outline-primary">Tìm bác sĩ</a>
+    </div>
+
+    <div class="position-relative">
+        <div class="doctor-slider d-flex overflow-auto" id="doctorSlider">
+            @foreach (var ns in Model.BacSiList)
+            {
+                <div class="card me-3 flex-shrink-0 doctor-card">
+                    <img src="@ns.anh_dai_dien" class="card-img-top rounded-top doctor-img" alt="Ảnh bác sĩ">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-semibold">@ns.ten_nhan_su</h5>
+                        <p class="text-muted mb-1">@ns.chuc_vu</p>
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Nút tiến lùi -->
+        <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y" onclick="scrollDoctor(-1)">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y" onclick="scrollDoctor(1)">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4 class="text-center mb-3">Sơ đồ bệnh viện</h4>
+    <div class="d-flex justify-content-center">
+        <img src="/image/so_do_test.webp" alt="Sơ đồ bệnh viện" class="img-fluid rounded shadow"
+            style="max-width: 1300px;" />
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
